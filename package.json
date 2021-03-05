@@ -1,0 +1,19 @@
+{
+  "name": "data-generation",
+  "version": "1.0.0",
+  "description": "Generate test data in mongoDB",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "author": "Lucia de Espona",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "dotenv": "^8.2.0",
+    "faker": "^5.4.0",
+    "mongodb": "^3.6.4",
+    "nodemon": "^2.0.7"
+  }
+}
