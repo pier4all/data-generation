@@ -29,10 +29,10 @@ async function run() {
     // Generate timesheets
     console.log(chalk.cyan.bold("\n2. Generating time sheets:"))
 
-    const numTimesheets = 300
-    const minDates = 10
-    const maxDates = 80
-    const batchSize = 100
+    const numTimesheets = 300 // total number of timesheet documents that you want to generate
+    const minDates = 10	  // minimum amount of timesheets per project-employee-service combination
+    const maxDates = 80    // minimum amount of timesheets per project-employee-service combination
+    const batchSize = 100  // number of timesheets to store in each JSON file 
 
     var timesheet;
     var timesheets = [];
@@ -52,10 +52,10 @@ async function run() {
 
         var numDates = getRandomInt(minDates, maxDates)
         for (let l = 0; l < numDates; l++) { 
-            // "date": "2020-11-01",
             // TODO: check not repeating
             // TODO: limit period
-            // TODO: set it to date only
+
+            // toggle comment on next line to set it to date with zeroes or string
             //var date = new Date(faker.date.past().toISOString().slice(0,10));
             var date = faker.date.past().toISOString().slice(0,10);
 
