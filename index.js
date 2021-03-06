@@ -8,7 +8,9 @@ const {ObjectID} = require('mongodb');
 const fs = require('fs');
 
 async function run() {
+    // 1. READ input files
     console.log(chalk.cyan.bold("\n1. Reading input files:"))
+
     var rawdata = fs.readFileSync('./data/input/customer.json');
     let customers = JSON.parse(rawdata);
     console.log(" - Read " + customers.length + " customers");
@@ -26,7 +28,7 @@ async function run() {
     console.log(" - Read " + services.length + " services");
 
 
-    // Generate timesheets
+    // 2. Generate timesheets and WRITE them in batches to files
     console.log(chalk.cyan.bold("\n2. Generating time sheets:"))
 
     const numTimesheets = 300 // total number of timesheet documents that you want to generate
@@ -86,12 +88,11 @@ async function run() {
         if (count < numTimesheets) console.log("- Generated \t" + (timesheets.length + count) + "/" + numTimesheets)
     }
 
-    // Insert in the DB
+    // 3. Read files and INSERT documents in the DB
     console.log(chalk.cyan.bold("\n3. Insert in MongoDB:"))
 
-    var MongoClient = require('mongodb').MongoClient;
-
     // Connect to the db
+    var MongoClient = require('mongodb').MongoClient;
     const mongodb_uri = process.env.DB_URI
     const client = new MongoClient(mongodb_uri, { useUnifiedTopology: true } );
 
