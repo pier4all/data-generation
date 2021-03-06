@@ -1,0 +1,161 @@
+[{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc25c"
+  },
+  "custno": 150001,
+  "name": "Billa AG",
+  "email": "info@billa.ch",
+  "language": "FR"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc25d"
+  },
+  "custno": 150002,
+  "name": "Frutiger AG",
+  "email": "info@frutiger.ch",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc25e"
+  },
+  "custno": 150003,
+  "name": "Auto-Center AG",
+  "email": "verkauf@autocenter.ch",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc25f"
+  },
+  "custno": 150004,
+  "name": "Tempo Transporte GmbH",
+  "email": "info@tempo.ch",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc260"
+  },
+  "custno": 150005,
+  "name": "Matter Handels AG",
+  "email": "matter@matter.ch",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc261"
+  },
+  "custno": 150006,
+  "name": "Schweizer Saatgut AG",
+  "email": "info@schweizer.ch",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc262"
+  },
+  "custno": 150007,
+  "name": "Miller Trading Co.",
+  "email": "sales@millertrading.co.uk",
+  "language": "EN"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc263"
+  },
+  "custno": 150008,
+  "name": "Kaixuan Development Ltd.",
+  "email": "song.limin@kaixuan.cn",
+  "language": "EN"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc264"
+  },
+  "custno": 150009,
+  "name": "Bernasconi GmbH",
+  "email": "info@bernasconi.ch",
+  "language": "IT"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc265"
+  },
+  "custno": 150010,
+  "name": "Diaz Electronics AG",
+  "email": "info@diaz-elec.com",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc266"
+  },
+  "custno": 150011,
+  "name": "Lostorfer-Wasser AG",
+  "email": "lostorfer@lowasser.ch",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc267"
+  },
+  "custno": 150012,
+  "name": "Bacher Hydraulik AG",
+  "email": "info@bacher.ch",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc268"
+  },
+  "custno": 150013,
+  "name": "Bank Clark S.A.",
+  "email": "info@bankclark.ch",
+  "language": "FR"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc269"
+  },
+  "custno": 150014,
+  "name": "Capital One Ltd.",
+  "email": "sales@capitalone.com",
+  "language": "EN"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc26a"
+  },
+  "custno": 150015,
+  "name": "Lancia Paint Export AG",
+  "email": "sales@lancia.ch",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc26b"
+  },
+  "custno": 150016,
+  "name": "Nordwest Bahn AG",
+  "email": "info@nordwest.ch",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc26c"
+  },
+  "custno": 150017,
+  "name": "Sigriswil Toursimus Verband",
+  "email": "info@sigriswil.ch",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc26d"
+  },
+  "custno": 150018,
+  "name": "Fritz Computer Service GmbH",
+  "email": "fritz_computer@gmail.com",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc26e"
+  },
+  "custno": 150019,
+  "name": "Flaschenfabrik Emmen AG",
+  "email": "info@flaschenemmen.ch",
+  "language": "DE"
+},{
+  "_id": {
+    "$oid": "604210e3c6c9e31574cfc26f"
+  },
+  "custno": 150020,
+  "name": "Kunz Import-Export GmbH",
+  "email": "kunz81@hotmail.com",
+  "language": "DE"
+}]

@@ -1,0 +1,280 @@
+[{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc221"
+  },
+  "empno": 103100,
+  "svn": "756.8033.8080.11",
+  "lastname": "Bieri",
+  "firstname": "Gustav",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc222"
+  },
+  "empno": 103101,
+  "svn": "756.5772.4179.19",
+  "lastname": "Egli",
+  "firstname": "Margrit",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc223"
+  },
+  "empno": 103102,
+  "svn": "756.2054.7003.96",
+  "lastname": "Maler",
+  "firstname": "Kurt",
+  "pensum": "80%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc224"
+  },
+  "empno": 103103,
+  "svn": "756.3711.6031.21",
+  "lastname": "Schneider",
+  "firstname": "Urs",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc225"
+  },
+  "empno": 103104,
+  "svn": "756.6924.2722.58",
+  "lastname": "Graf",
+  "firstname": "Martina",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc226"
+  },
+  "empno": 103105,
+  "svn": "756.1250.5965.42",
+  "lastname": "Keller",
+  "firstname": "Alfons",
+  "pensum": "60%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc227"
+  },
+  "empno": 103106,
+  "svn": "756.3305.5087.25",
+  "lastname": "Bieber",
+  "firstname": "Reto",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc228"
+  },
+  "empno": 103107,
+  "svn": "756.9081.4806.88",
+  "lastname": "Gerber",
+  "firstname": "Elsa",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc229"
+  },
+  "empno": 103108,
+  "svn": "756.6787.3682.93",
+  "lastname": "Weber",
+  "firstname": "Loris",
+  "pensum": "60%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc22a"
+  },
+  "empno": 103109,
+  "svn": "756.6931.6240.53",
+  "lastname": "Huber",
+  "firstname": "Samuel",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc22b"
+  },
+  "empno": 103110,
+  "svn": "756.1977.9459.85",
+  "lastname": "Steiger",
+  "firstname": "Laura",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc22c"
+  },
+  "empno": 103111,
+  "svn": "756.2504.9636.55",
+  "lastname": "Caduff",
+  "firstname": "Alina",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc22d"
+  },
+  "empno": 103112,
+  "svn": "756.6440.2880.36",
+  "lastname": "Rochat",
+  "firstname": "Luc",
+  "pensum": "40%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc22e"
+  },
+  "empno": 103113,
+  "svn": "756.8925.9014.27",
+  "lastname": "Nguyen",
+  "firstname": "Lili",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc22f"
+  },
+  "empno": 103114,
+  "svn": "756.8915.9346.87",
+  "lastname": "Berger",
+  "firstname": "Sara",
+  "pensum": "90%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc230"
+  },
+  "empno": 103115,
+  "svn": "756.4086.7059.85",
+  "lastname": "Elmer",
+  "firstname": "David",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc231"
+  },
+  "empno": 103116,
+  "svn": "756.6204.5753.60",
+  "lastname": "Wyss",
+  "firstname": "Liam",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc232"
+  },
+  "empno": 103117,
+  "svn": "756.9609.4424.97",
+  "lastname": "Krasniqi",
+  "firstname": "Sofia",
+  "pensum": "80%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc233"
+  },
+  "empno": 103118,
+  "svn": "756.7536.2221.50",
+  "lastname": "Bucher",
+  "firstname": "Anton",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc234"
+  },
+  "empno": 103119,
+  "svn": "756.4148.2866.11",
+  "lastname": "Gashi",
+  "firstname": "Enis",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc235"
+  },
+  "empno": 103120,
+  "svn": "756.4338.7879.83",
+  "lastname": "Dujardin",
+  "firstname": "Martin",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc236"
+  },
+  "empno": 103121,
+  "svn": "756.2969.5085.17",
+  "lastname": "Deng",
+  "firstname": "Richard",
+  "pensum": "80%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc237"
+  },
+  "empno": 103122,
+  "svn": "756.9573.5921.67",
+  "lastname": "Smirnov",
+  "firstname": "Nikolai",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc238"
+  },
+  "empno": 103123,
+  "svn": "756.9134.1952.37",
+  "lastname": "Dubois",
+  "firstname": "Ramona",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc239"
+  },
+  "empno": 103124,
+  "svn": "756.1730.7748.90",
+  "lastname": "Joensen",
+  "firstname": "Andreas",
+  "pensum": "60%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc23a"
+  },
+  "empno": 103125,
+  "svn": "756.6781.5610.70",
+  "lastname": "Becker",
+  "firstname": "Liliane",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc23b"
+  },
+  "empno": 103126,
+  "svn": "756.4175.5916.63",
+  "lastname": "Murphy",
+  "firstname": "John",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc23c"
+  },
+  "empno": 103127,
+  "svn": "756.4337.3238.23",
+  "lastname": "Babic",
+  "firstname": "Mio",
+  "pensum": "40%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc23d"
+  },
+  "empno": 103128,
+  "svn": "756.2723.6955.24",
+  "lastname": "Engel",
+  "firstname": "Gabriel",
+  "pensum": "100%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc23e"
+  },
+  "empno": 103129,
+  "svn": "756.2960.5786.93",
+  "lastname": "Grossen",
+  "firstname": "Nora",
+  "pensum": "20%"
+},{
+  "_id": {
+    "$oid": "6042033ec6c9e31574cfc23f"
+  },
+  "empno": 103130,
+  "svn": "756.5658.4752.05",
+  "lastname": "Sattler",
+  "firstname": "Livia",
+  "pensum": "100%"
+}]

@@ -1,0 +1,81 @@
+[{
+  "_id": {
+    "$oid": "60421648c6c9e31574cfc284"
+  },
+  "servno": 115101,
+  "descr": "Administration",
+  "type": "Stunde",
+  "price": 80
+},{
+  "_id": {
+    "$oid": "60421648c6c9e31574cfc285"
+  },
+  "servno": 115102,
+  "descr": "Projekt Management",
+  "type": "Stunde",
+  "price": 190
+},{
+  "_id": {
+    "$oid": "60421648c6c9e31574cfc286"
+  },
+  "servno": 115103,
+  "descr": "First Level Support",
+  "type": "Stunde",
+  "price": 120
+},{
+  "_id": {
+    "$oid": "60421648c6c9e31574cfc287"
+  },
+  "servno": 115104,
+  "descr": "Second Level Support",
+  "type": "Stunde",
+  "price": 160
+},{
+  "_id": {
+    "$oid": "60421648c6c9e31574cfc288"
+  },
+  "servno": 115105,
+  "descr": "Evaluation Service",
+  "type": "Stunde",
+  "price": 190
+},{
+  "_id": {
+    "$oid": "60421648c6c9e31574cfc289"
+  },
+  "servno": 115106,
+  "descr": "Implementation Service",
+  "type": "Stunde",
+  "price": 190
+},{
+  "_id": {
+    "$oid": "60421648c6c9e31574cfc28a"
+  },
+  "servno": 115107,
+  "descr": "General Consulting",
+  "type": "Stunde",
+  "price": 190
+},{
+  "_id": {
+    "$oid": "60421648c6c9e31574cfc28b"
+  },
+  "servno": 115108,
+  "descr": "Strategy Consulting",
+  "type": "Stunde",
+  "price": 230
+},{
+  "_id": {
+    "$oid": "60421648c6c9e31574cfc28c"
+  },
+  "servno": 115109,
+  "descr": "Referenzbesuch",
+  "type": "Stunde",
+  "price": 80
+},{
+  "_id": {
+    "$oid": "60421648c6c9e31574cfc28d"
+  },
+  "servno": 115110,
+  "descr": "Programming",
+  "type": "Stunde",
+  "price": 150
+}]
