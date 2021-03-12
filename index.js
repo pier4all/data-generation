@@ -2,6 +2,10 @@ var faker = require('faker');
 var chalk = require('chalk');
 require('dotenv').config()
 const {ObjectID} = require('mongodb');
+const query = require('./query')
+
+// true will skip insertions and run only the queries in query.js
+const QUERY_ONLY = false
 
 // Read input files
 'use strict';
@@ -27,24 +31,37 @@ async function run() {
     let services = JSON.parse(rawdata);
     console.log(" - Read " + services.length + " services");
 
+    // 2. Connect to the db
+    console.log(chalk.cyan.bold("\n2. Connecting to MongoDB:"))
 
-    // 2. Generate timesheets and WRITE them in batches to files
-    console.log(chalk.cyan.bold("\n2. Generating time sheets:"))
+    const DB = "data_generation"
+    const COLLECTION = 'timesheets'
+
+    var MongoClient = require('mongodb').MongoClient;
+    const mongodb_uri = process.env.DB_URI
+    const client = new MongoClient(mongodb_uri, { useUnifiedTopology: true } );
+
+    await client.connect();
+    console.log(chalk.yellow.italic(" * Connected to DB"))
+    const db = client.db(DB);
+    const collection = db.collection(COLLECTION)
+
+    // 3. Generate timesheets and WRITE them in batches to files
+    console.log(chalk.cyan.bold("\n3. Generating time sheets:"))
 
     const numTimesheets = 300 // total number of timesheet documents that you want to generate
     const minDates = 10	  // minimum amount of timesheets per project-employee-service combination
     const maxDates = 80    // minimum amount of timesheets per project-employee-service combination
     const batchSize = 100  // number of timesheets to store in each JSON file 
 
-    var timesheet;
+    var timesheet; 
+    var timesheets = []; // timesheets as Javascript objects to import into Mongo
+
     var timesheet_export;
-    var timesheets = [];
-    var timesheets_export = [];
+    var timesheets_export = []; // timesheets to save to file with proper formatting
+
     var count = 0
     var outputFiles = []
-
-    const DB = "data_generation"
-    const COLLECTION = 'timesheets'
 
     function getRandomInt(min, max) {
         min = Math.ceil(min);
@@ -52,19 +69,8 @@ async function run() {
         return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
     }
 
-        
-
-    // Connect to the db
-    var MongoClient = require('mongodb').MongoClient;
-    const mongodb_uri = process.env.DB_URI
-    const client = new MongoClient(mongodb_uri, { useUnifiedTopology: true } );
-
     // do the insertions
     try {
-        await client.connect();
-        console.log(chalk.greenBright.bold(" * Connected to DB"))
-        const db = client.db(DB);
-        const collection = db.collection(COLLECTION)
 
         while ((count + timesheets.length) < numTimesheets) { 
             var project = projects[getRandomInt(0, projects.length)]._id["$oid"]
@@ -80,7 +86,7 @@ async function run() {
                 var date = new Date(faker.date.past().toISOString().slice(0,10));
                 //var date = faker.date.past().toISOString().slice(0,10);
 
-                // "quantity": 1.5
+                // Random float number between 8.9 and 1 
                 var quantity = 1.0 + (faker.random.number() % 8) + (faker.random.number() % 10) / 10.0
                 
                 timesheet = { 
@@ -116,18 +122,26 @@ async function run() {
                     timesheets = []
                     console.log(chalk.yellow.italic("* Inserted batch to MongoDB: " + DB + '.' + COLLECTION))
 
-                    //exit loop in enough time sheets
+                    //exit loop if enough total timesheets
                     if (count >= numTimesheets) break
                 }
             }
-            
             if (count < numTimesheets) console.log("- Generated \t" + (timesheets.length + count) + "/" + numTimesheets)
         }
+
     } finally {
         client.close();                
     }
 
-    console.log(chalk.green.bold("\nDONE, script finished successfully!!\n"))
+    // run the queries
+    console.log(chalk.green.bold("\n Insertion script finished successfully!! Querying...\n"))
+    await query.run()
+
+
 }
 
-run().catch(console.dir);
+if (QUERY_ONLY) {
+    query.run().catch(console.dir);
+} else {
+    run().catch(console.dir);
+}
