@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "node index.js"
+    "dev": "node index.js",
+    "load": "node load_api.js"
   },
   "author": "Lucia de Espona",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "chalk": "^4.1.0",
     "dotenv": "^8.2.0",
     "faker": "^5.4.0",
