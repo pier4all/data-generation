@@ -4,7 +4,6 @@ const axios = require('axios');
 require('dotenv').config()
 const { ObjectID } = require('mongodb');
 
-
 // Read input files
 'use strict';
 const fs = require('fs');
@@ -20,7 +19,10 @@ async function run() {
         './data/input/customer.json',
         './data/input/employee.json',
         './data/input/project-edited.json',
-        './data/input/service.json'
+        './data/input/service.json',
+        './data/output/timesheet_100.json',
+        './data/output/timesheet_200.json',
+        './data/output/timesheet_300.json'    
     ]
 
     for (var file of fileList) {
@@ -31,16 +33,25 @@ async function run() {
         console.log("\t - Read " + documents.length + " documents");
 
         // insert them
-        var collection = file.split('/')[3].split('.')[0].split('-')[0]
+        var collection = file.split('/')[3].split('.')[0].split('-')[0].split('_')[0]
         console.log("\t - Collection '" + collection + "'");
         var url = generateRequest(collection)
         for(var document of documents) {
             try {
-                document._id =  document._id["$oid"]
+                Object.keys(document).forEach(function(key) {
+                    var value = document[key]
+                    var tags = ["$oid", "$date"]
+                    tags.forEach( tag => {
+                        if ((!!value) && (value.constructor === Object) 
+                                      && (value.hasOwnProperty(tag))) {
+                            document[key] = value[tag]
+                        }
+                    })
+                }); 
                 var response = await axios.post( url, document);            
             } catch (error) {
-                console.error(error.message);
-                break
+                console.error(chalk.redBright.bold(error.message));
+                return
             }           
         }
     } 
