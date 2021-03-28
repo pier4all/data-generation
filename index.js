@@ -2,10 +2,10 @@ var faker = require('faker');
 var chalk = require('chalk');
 require('dotenv').config()
 const {ObjectID} = require('mongodb');
-const query = require('./query')
+const query = require('./query_iterative')
 
 // true will skip insertions and run only the queries in query.js
-const QUERY_ONLY = false
+const QUERY_ONLY = true
 
 // Read input files
 'use strict';
