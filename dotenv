@@ -2,3 +2,4 @@
 # Do not surround the URI with quotes
 DB_URI=mongodb://<user>:<password>@<server>:<port>/<db>?authSource=<authdb>
 API_URL=http://127.0.0.1:3210
+DB_NAME=<database name>
