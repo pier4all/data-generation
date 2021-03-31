@@ -6,14 +6,14 @@ require('dotenv').config()
 const {ObjectID} = require('mongodb');
 const fs = require('fs');
 const { random } = require('faker');
+var path = require('path');
 
-exports.run = async () => {
-
+exports.run = async (numDocuments = 20) => {
 
     // 1. Connect to the db
     console.log(chalk.cyan.bold("\n1. Connecting to MongoDB:"))
 
-    const DB = "enablerr_test"
+    const DB = process.env.DB_NAME
     const COLLECTION = 'employees'
 
     var MongoClient = require('mongodb').MongoClient;
@@ -28,10 +28,10 @@ exports.run = async () => {
     // 2. Generate employees and WRITE them in batches to files
     console.log(chalk.cyan.bold("\n2. Generating documents:"))
 
-    const numDocuments = 20000 // total number of documents that you want to generate
-    const minDates = 10	  // minimum amount of documents per combination of inputs
-    const maxDates = 200    // maximum amount of documents per combination of inputs
-    const batchSize = 20000  // number of documents to store in each JSON file 
+    // TODO: Guess all this params from numDocuments (original 20000)
+    const minDates = Math.min(10, numDocuments)	  // minimum amount of documents per input combination
+    const maxDates = Math.min(200, numDocuments)    // minimum amount of documents per input combination
+    const batchSize = (numDocuments>500) ? Math.max(1, numDocuments/10) : numDocuments // number of documents to store in each JSON file 
 
     var document; 
     var documents = []; // documents as Javascript objects to import into Mongo
@@ -87,7 +87,7 @@ exports.run = async () => {
                 if ((documents.length >= batchSize) || ((count + documents.length) >= numDocuments)){
                     count += documents.length
 
-                    var outputPath = './data/output/employee_' + count + '.json'
+                    var outputPath = path.join(__dirname, '..', 'data', 'output', 'employee_' + count + '.json');
                     fs.writeFileSync(outputPath, JSON.stringify(documents_export, null, 2))
                     outputFiles.push(outputPath)
                     documents_export = []
@@ -120,7 +120,5 @@ exports.run = async () => {
 
     console.log(chalk.green.bold("\n Insertion script finished successfully!!\n"))
 
-
 }
 
-run().catch(console.dir);

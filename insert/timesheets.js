@@ -5,32 +5,37 @@ var chalk = require('chalk');
 require('dotenv').config()
 const {ObjectID} = require('mongodb');
 const fs = require('fs');
+var path = require('path');
 
-exports.run = async () => {
+exports.run = async (numDocuments = 20) => {
 
     // 1. READ input files
     console.log(chalk.cyan.bold("\n1. Reading input files:"))
 
-    var rawdata = fs.readFileSync('./data/input/customer.json');
+    var customerPath = path.join(__dirname, '..', 'data', 'input', 'customer.json');
+    var rawdata = fs.readFileSync(customerPath);
     let customers = JSON.parse(rawdata);
     console.log(" - Read " + customers.length + " customers");
 
-    rawdata = fs.readFileSync('./data/input/employee.json');
+    var employeePath = path.join(__dirname, '..', 'data', 'input', 'employee.json');
+    rawdata = fs.readFileSync(employeePath);
     let employees = JSON.parse(rawdata);
     console.log(" - Read " + employees.length + " employees");
-
-    rawdata = fs.readFileSync('./data/input/project.json');
+    
+    var projectPath = path.join(__dirname, '..', 'data', 'input', 'project.json');
+    rawdata = fs.readFileSync(projectPath);
     let projects = JSON.parse(rawdata);
     console.log(" - Read " + projects.length + " projects");
 
-    rawdata = fs.readFileSync('./data/input/service.json');
+    var servicePath = path.join(__dirname, '..', 'data', 'input', 'service.json');
+    rawdata = fs.readFileSync(servicePath);
     let services = JSON.parse(rawdata);
     console.log(" - Read " + services.length + " services");
 
     // 2. Connect to the db
     console.log(chalk.cyan.bold("\n2. Connecting to MongoDB:"))
 
-    const DB = "enablerr_test"
+    const DB = process.env.DB_NAME
     const COLLECTION = 'timesheets'
 
     var MongoClient = require('mongodb').MongoClient;
@@ -45,11 +50,11 @@ exports.run = async () => {
     // 3. Generate timesheets and WRITE them in batches to files
     console.log(chalk.cyan.bold("\n3. Generating time sheets:"))
 
-    const numDocuments = 1000000 // total number of timesheet documents that you want to generate
-    const minDates = 5	  // minimum amount of combinations
-    const maxDates = 30    // maximum amount of combinations
-    const batchSize = 1000000  // number of timesheets to store in each JSON file 
-
+    // TODO: Guess all this params from numDocuments (original 1000000)
+    const minDates = Math.min(5, numDocuments)	  // minimum amount of documents per input combination
+    const maxDates = Math.min(30, numDocuments)    // minimum amount of documents per input combination
+    const batchSize = (numDocuments>500) ? Math.max(1, numDocuments/10) : numDocuments // number of documents to store in each JSON file 
+   
     var timesheet; 
     var timesheets = []; // timesheets as Javascript objects to import into Mongo
 
@@ -108,7 +113,7 @@ exports.run = async () => {
                 if ((timesheets.length >= batchSize) || ((count + timesheets.length) >= numDocuments)){
                     count += timesheets.length
 
-                    var outputPath = './data/output/timesheet_' + count + '.json'
+                    var outputPath = path.join(__dirname, '..', 'data', 'output', 'timesheet_' + count + '.json');
                     fs.writeFileSync(outputPath, JSON.stringify(timesheets_export, null, 2))
                     outputFiles.push(outputPath)
                     timesheets_export = []
@@ -139,5 +144,3 @@ exports.run = async () => {
     }
 
 }
-
-run().catch(console.dir);

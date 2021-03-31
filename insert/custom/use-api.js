@@ -1,5 +1,6 @@
 var chalk = require('chalk');
 const axios = require('axios');
+var path = require('path');
 
 require('dotenv').config()
 const { ObjectID } = require('mongodb');
@@ -13,16 +14,16 @@ const generateRequest = (collection) => {
     return url
 }
 
-async function run() {
+exports.run = async () => {
 
     var fileList = [
-        './data/input/customer.json',
-        './data/input/employee.json',
-        './data/input/project-edited.json',
-        './data/input/service.json',
-        './data/output/timesheet_100.json',
-        './data/output/timesheet_200.json',
-        './data/output/timesheet_300.json'    
+        path.join(__dirname, '..', '..', 'data', 'input', 'customer.json'),
+        path.join(__dirname, '..', '..', 'data', 'input', 'employee.json'),
+        path.join(__dirname, '..', '..', 'data', 'input', 'project-edited.json'),
+        path.join(__dirname, '..', '..', 'data', 'input', 'service.json'),
+        path.join(__dirname, '..', '..', 'data', 'output', 'timesheet_100.json'),
+        path.join(__dirname, '..', '..', 'data', 'output', 'timesheet_200.json'),
+        path.join(__dirname, '..', '..', 'data', 'output', 'timesheet_300.json')    
     ]
 
     for (var file of fileList) {
@@ -33,7 +34,7 @@ async function run() {
         console.log("\t - Read " + documents.length + " documents");
 
         // insert them
-        var collection = file.split('/')[3].split('.')[0].split('-')[0].split('_')[0]
+        var collection = path.basename(file).split('.')[0].split('-')[0].split('_')[0]
         console.log("\t - Collection '" + collection + "'");
         var url = generateRequest(collection)
         for(var document of documents) {
@@ -56,5 +57,3 @@ async function run() {
         }
     } 
 }
-
-run().catch(console.dir);

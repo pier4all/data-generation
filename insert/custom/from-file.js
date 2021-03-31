@@ -2,39 +2,40 @@ var faker = require('faker');
 var chalk = require('chalk');
 require('dotenv').config()
 const {ObjectID} = require('mongodb');
-const query = require('./query_iterative')
-
-// true will skip insertions and run only the queries in query.js
-const QUERY_ONLY = true
+var path = require('path');
 
 // Read input files
 'use strict';
 const fs = require('fs');
 
-async function run() {
+exports.run = async (numDocuments = 20) => {
     // 1. READ input files
     console.log(chalk.cyan.bold("\n1. Reading input files:"))
 
-    var rawdata = fs.readFileSync('./data/input/customer.json');
+    var customerPath = path.join(__dirname, '..', '..', 'data', 'input', 'customer.json');
+    var rawdata = fs.readFileSync(customerPath);
     let customers = JSON.parse(rawdata);
     console.log(" - Read " + customers.length + " customers");
 
-    rawdata = fs.readFileSync('./data/input/employee.json');
+    var employeePath = path.join(__dirname, '..', '..', 'data', 'input', 'employee.json');
+    rawdata = fs.readFileSync(employeePath);
     let employees = JSON.parse(rawdata);
     console.log(" - Read " + employees.length + " employees");
-
-    rawdata = fs.readFileSync('./data/input/project.json');
+    
+    var projectPath = path.join(__dirname, '..', '..', 'data', 'input', 'project.json');
+    rawdata = fs.readFileSync(projectPath);
     let projects = JSON.parse(rawdata);
     console.log(" - Read " + projects.length + " projects");
 
-    rawdata = fs.readFileSync('./data/input/service.json');
+    var servicePath = path.join(__dirname, '..', '..', 'data', 'input', 'service.json');
+    rawdata = fs.readFileSync(servicePath);
     let services = JSON.parse(rawdata);
     console.log(" - Read " + services.length + " services");
 
     // 2. Connect to the db
     console.log(chalk.cyan.bold("\n2. Connecting to MongoDB:"))
 
-    const DB = "data_generation"
+    const DB = process.env.DB_NAME
     const COLLECTION = 'timesheets'
 
     var MongoClient = require('mongodb').MongoClient;
@@ -49,11 +50,11 @@ async function run() {
     // 3. Generate timesheets and WRITE them in batches to files
     console.log(chalk.cyan.bold("\n3. Generating time sheets:"))
 
-    const numTimesheets = 300 // total number of timesheet documents that you want to generate
-    const minDates = 10	  // minimum amount of timesheets per project-employee-service combination
-    const maxDates = 80    // minimum amount of timesheets per project-employee-service combination
-    const batchSize = 100  // number of timesheets to store in each JSON file 
-
+    // TODO: Guess all this params from numDocuments (original 300)
+    const minDates = Math.min(10, numDocuments)	  // minimum amount of documents per input combination
+    const maxDates = Math.min(80, numDocuments)    // minimum amount of documents per input combination
+    const batchSize = (numDocuments>500) ? Math.max(1, numDocuments/10) : numDocuments // number of documents to store in each JSON file 
+ 
     var timesheet; 
     var timesheets = []; // timesheets as Javascript objects to import into Mongo
 
@@ -72,7 +73,7 @@ async function run() {
     // do the insertions
     try {
 
-        while ((count + timesheets.length) < numTimesheets) { 
+        while ((count + timesheets.length) < numDocuments) { 
             var project = projects[getRandomInt(0, projects.length)]._id["$oid"]
             var employee = employees[getRandomInt(0, employees.length)]._id["$oid"]
             var service = services[getRandomInt(0, services.length)]._id["$oid"]
@@ -109,10 +110,10 @@ async function run() {
                 timesheets_export.push(timesheet_export)
 
                 // save one batch to file and db, end the process if enough time sheets
-                if ((timesheets.length >= batchSize) || ((count + timesheets.length) >= numTimesheets)){
+                if ((timesheets.length >= batchSize) || ((count + timesheets.length) >= numDocuments)){
                     count += timesheets.length
 
-                    var outputPath = './data/output/timesheet_' + count + '.json'
+                    var outputPath = path.join(__dirname, '..', '..', 'data', 'output', 'timesheet_' + count + '.json');
                     fs.writeFileSync(outputPath, JSON.stringify(timesheets_export, null, 2))
                     outputFiles.push(outputPath)
                     timesheets_export = []
@@ -123,25 +124,13 @@ async function run() {
                     console.log(chalk.yellow.italic("* Inserted batch to MongoDB: " + DB + '.' + COLLECTION))
 
                     //exit loop if enough total timesheets
-                    if (count >= numTimesheets) break
+                    if (count >= numDocuments) break
                 }
             }
-            if (count < numTimesheets) console.log("- Generated \t" + (timesheets.length + count) + "/" + numTimesheets)
+            if (count < numDocuments) console.log("- Generated \t" + (timesheets.length + count) + "/" + numDocuments)
         }
 
     } finally {
         client.close();                
     }
-
-    // run the queries
-    console.log(chalk.green.bold("\n Insertion script finished successfully!! Querying...\n"))
-    await query.run()
-
-
-}
-
-if (QUERY_ONLY) {
-    query.run().catch(console.dir);
-} else {
-    run().catch(console.dir);
 }
