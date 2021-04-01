@@ -10,7 +10,7 @@ const { ObjectID } = require('mongodb');
 const fs = require('fs');
 
 const generateRequest = (collection) => {
-    var url = `${process.env.API_URL}/${collection}/create`
+    var url = `${process.env.API_URL}/crud/${collection}`
     return url
 }
 
