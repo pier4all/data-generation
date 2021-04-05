@@ -8,7 +8,7 @@ exports.run = async () => {
     // 1. Connect to the db
     console.log(chalk.cyan.bold("\n1. Re-connecting to MongoDB:"))
 
-    const DB = "data_generation"
+    const DB = process.env.DB_NAME
     const COLLECTION = 'timesheets'
 
     var MongoClient = require('mongodb').MongoClient;
