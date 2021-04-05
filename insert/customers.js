@@ -47,7 +47,9 @@ exports.run = async (numDocuments = 20) => {
 
             // added for customers
             var name = faker.company.companyName();
-            var email = name.toLowerCase().replace(' and ', '_').replace(' ','_').replace(/[^a-zA-Z0-9_]/g,'') + '@' + faker.internet.email().split('@')[1];
+            var separators = ['_', '.', '']
+            var separator = separators[Math.floor(Math.random() * separators.length)];
+            var email = name.toLowerCase().replace(' and ', separator).replace(' ',separator).replace(/[^a-zA-Z0-9_\.]/g,'') + '@' + faker.internet.email().split('@')[1];
             
             const language = ["DE", "EN", "FR"];
             var random_language = language[Math.floor(Math.random() * language.length)];
