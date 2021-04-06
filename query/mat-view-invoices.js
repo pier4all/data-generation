@@ -23,6 +23,9 @@ exports.run = async () => {
    
     try { 
         // 2. Running an Aggregation (mat-view)
+        var startDate = '2020-12-01 00:00:00 GMT'
+        var endDate = '2021-01-01 00:00:00 GMT'
+
         console.log(chalk.cyan.bold("\n2. Aggregating time sheets by project and month:"))
 
          // aggregate by month and project
@@ -30,15 +33,19 @@ exports.run = async () => {
           {
             '$match': {
               'date': {
-                '$gte': new Date('01 Dec 2020 00:00:00 GMT'), 
-                '$lt': new Date('01 Jan 2021 00:00:00 GMT')
+                '$gte': new Date(startDate), 
+                '$lt': new Date(endDate)
               }
             }
           }, {
             '$addFields': {
               'price': {
-                '$multiply': [
-                  '$quantity', 50
+                '$round': [
+                  {
+                    '$multiply': [
+                      '$quantity', 50.0
+                    ]
+                  }, 1
                 ]
               }
             }
@@ -70,7 +77,7 @@ exports.run = async () => {
             }
           }, {
             '$merge': {
-              'into': 'monthlyInvoicing', 
+              'into': 'invoices', 
               'whenMatched': 'replace'
             }
           }
@@ -82,13 +89,11 @@ exports.run = async () => {
         var start = process.hrtime();
         console.log(start); // timer start
 
-
         var aggregationResult = await collection.aggregate(pipeline).toArray() // limit(2). removed // , { allowDiskUse: true } removed
-        console.log(chalk.yellow.italic(" * Result: " + JSON.stringify(aggregationResult, null, 2)))       
        
         // stopping time and loging to console
         var end = process.hrtime(start);
-        console.log(chalk.bgRed.bold(`\nExecution time: ${end[0]}s ${end[1] / 1000000}ms\n`));
+        console.log(chalk.magenta.bold(`\nExecution time: ${end[0]}s ${end[1] / 1000000}ms\n`));
 
 
       } finally {

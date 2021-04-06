@@ -38,18 +38,19 @@ exports.run = async (numDocuments = 20) => {
     console.log(" - Running query on " + refcollection.namespace + ", projection: " + JSON.stringify(projection));
     var employees = await refcollection.find({}, { projection } ).toArray()
     console.log(" - Read " + employees.length + " " + refcollection.namespace.split('.')[1]);
-
-    refcollection = db.collection("projects")
-    console.log(" - Running query on " + refcollection.namespace + ", projection: " + JSON.stringify(projection));
-    var projects = await refcollection.find({}, { projection } ).toArray()
-    console.log(" - Read " + projects.length + " " + refcollection.namespace.split('.')[1]);
-
+ 
     refcollection = db.collection("services")
     console.log(" - Running query on " + refcollection.namespace + ", projection: " + JSON.stringify(projection));
     var services = await refcollection.find({}, { projection } ).toArray()
     console.log(" - Read " + services.length + " " + refcollection.namespace.split('.')[1]);
 
-    // 3. Generate timesheets and WRITE them in batches to files
+    refcollection = db.collection("projects")    
+    var projection = {"ref-employee":1}
+    console.log(" - Running query on " + refcollection.namespace + ", projection: " + JSON.stringify(projection));
+    var projects = await refcollection.find({}, { projection } ).toArray()
+    console.log(" - Read " + projects.length + " " + refcollection.namespace.split('.')[1]);
+
+   // 3. Generate timesheets and WRITE them in batches to files
     console.log(chalk.cyan.bold("\n3. Generating time sheets:"))
 
     // TODO: Guess all this params from numDocuments (original 1000000)
@@ -70,9 +71,10 @@ exports.run = async (numDocuments = 20) => {
     try {
 
         while ((count + timesheets.length) < numDocuments) { 
-            var project = projects[getRandomInt(0, projects.length)]._id["$oid"]
-            var employee = employees[getRandomInt(0, employees.length)]._id["$oid"]
-            var service = services[getRandomInt(0, services.length)]._id["$oid"]
+            var projectDoc = projects[getRandomInt(0, projects.length)]
+            var project = projectDoc._id
+            var employee = employees[getRandomInt(0, employees.length)]._id
+            var service = services[getRandomInt(0, services.length)]._id
 
             var numDates = getRandomInt(minDates, maxDates)
             for (let l = 0; l < numDates; l++) { 
@@ -104,6 +106,32 @@ exports.run = async (numDocuments = 20) => {
 
                 timesheets.push(timesheet)
                 timesheets_export.push(timesheet_export)
+
+                // generate (sometimes) one timesheet entry for the project-assigned employee on that date
+                if (((count + timesheets.length) < numDocuments) && (timesheets.length < batchSize)){
+                    quantity = 1.0 + (faker.random.number() % 8) + (faker.random.number() % 10) / 10.0
+                    if (quantity < 3) {
+
+                        timesheet = { 
+                            "ref-project": new ObjectID(project) , 
+                            "ref-employee": new ObjectID(projectDoc["ref-employee"]),
+                            "ref-service": new ObjectID(service), 
+                            date: date,
+                            quantity
+                        }    
+        
+                        timesheet_export = { 
+                            "ref-project": { "$oid": new ObjectID(project) }, 
+                            "ref-employee": new ObjectID(projectDoc["ref-employee"]),
+                            "ref-service": { "$oid": new ObjectID(service) }, 
+                            date: { "$date": date },
+                            quantity
+                        }  
+
+                        timesheets.push(timesheet)
+                        timesheets_export.push(timesheet_export)
+                    }
+                }
 
                 // save one batch to file and db, end the process if enough time sheets
                 if ((timesheets.length >= batchSize) || ((count + timesheets.length) >= numDocuments)){
