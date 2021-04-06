@@ -4,7 +4,7 @@ var chalk = require('chalk');
 require('dotenv').config()
 const {ObjectId} = require('mongodb');
 
-exports.run = async () => {
+exports.run = async (params) => {
 
     // 1. Connect to the db
     console.log(chalk.cyan.bold("\n1. Connecting to MongoDB:"))
@@ -23,10 +23,19 @@ exports.run = async () => {
    
     try { 
         // 2. Running an Aggregation (mat-view)
+        console.log(chalk.cyan.bold("\n2. Aggregating time sheets by project and month:"))
+
+        // get dates from parameters or default
         var startDate = '2020-12-01 00:00:00 GMT'
         var endDate = '2021-01-01 00:00:00 GMT'
 
-        console.log(chalk.cyan.bold("\n2. Aggregating time sheets by project and month:"))
+        if (params) {
+          var dates = JSON.parse(params.replace(/'/g, '"'))
+          startDate = dates.startDate + " 00:00:00 GMT"
+          endDate = dates.endDate + " 00:00:00 GMT"
+        }
+        console.log(chalk.cyan.yellow(`\t * Date range: ${startDate.split(' ')[0]} - ${endDate.split(' ')[0]}`))
+
 
          // aggregate by month and project
          let pipeline = [
@@ -83,17 +92,16 @@ exports.run = async () => {
           }
         ]
            
-        console.log(" - Running aggregation by project, month, year: ");
+        console.log("\t - Running aggregation by project, month, year: ");
 
         // initializing Timer
         var start = process.hrtime();
-        console.log(start); // timer start
 
-        var aggregationResult = await collection.aggregate(pipeline).toArray() // limit(2). removed // , { allowDiskUse: true } removed
+        await collection.aggregate(pipeline).toArray() // limit(2). removed // , { allowDiskUse: true } removed
        
         // stopping time and loging to console
         var end = process.hrtime(start);
-        console.log(chalk.magenta.bold(`\nExecution time: ${end[0]}s ${end[1] / 1000000}ms\n`));
+        console.log(chalk.magenta.bold(`\t  Execution time: ${end[0]}s ${end[1] / 1000000}ms\n`));
 
 
       } finally {

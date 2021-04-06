@@ -57,11 +57,16 @@ yargs.command({
             describe: 'Script name without extension',
             demandOption: true,
             type: 'string'
+        },
+        params: {
+            describe: 'JSON string containing parameters',
+            demandOption: false,
+            type: 'string'
         }
     },
     handler: function(argv) {
         const generator = require('./query/'+ argv.script)
-        generator.run()
+        generator.run(argv.params)
     }
 })
 
