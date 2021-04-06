@@ -105,6 +105,7 @@ dist
 
 # output
 data/output/*.json
+data/output/*.txt
 
 #vs
 .vscode/

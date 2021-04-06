@@ -5,8 +5,8 @@ var chalk = require('chalk');
 require('dotenv').config()
 const {ObjectID} = require('mongodb');
 const fs = require('fs');
-const { random } = require('faker');
 var path = require('path');
+const { getRandomInt } = require("./common/util")
 
 exports.run = async (numDocuments = 20) => {
 
@@ -40,12 +40,6 @@ exports.run = async (numDocuments = 20) => {
     var count = 0
     var outputFiles = []
 
-    function getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
-    }
-
     // do the insertions
     try {
 
@@ -58,8 +52,10 @@ exports.run = async (numDocuments = 20) => {
             
             const pensum = ["100%", "80%", "60%"];
             var random_pensum = pensum[Math.floor(Math.random() * pensum.length)];
+            var empno = 100000 + count + documents.length
 
             document = { 
+                empno: empno,
                 snv: snv,
                 lastname: lastname,
                 firstname: firstname,
@@ -67,6 +63,7 @@ exports.run = async (numDocuments = 20) => {
             }    
 
             document_export = { 
+                empno: empno,
                 snv: snv,
                 lastname: lastname,
                 firstname: firstname,
@@ -86,7 +83,7 @@ exports.run = async (numDocuments = 20) => {
                 documents_export = []
                 console.log(chalk.yellow.italic("* Saved batch to: " + outputPath))
                 
-                console.log(chalk.yellow.italic("* Inserting batch to MongoDB: " + DB + '.' + COLLECTION))
+                console.log(chalk.yellow.italic("* Inserting batch to MongoDB: " + collection.namespace))
 
                 // Timer
                 var start = process.hrtime();

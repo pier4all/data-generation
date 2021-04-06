@@ -6,33 +6,11 @@ require('dotenv').config()
 const {ObjectID} = require('mongodb');
 const fs = require('fs');
 var path = require('path');
+const { getRandomInt } = require("./common/util")
 
 exports.run = async (numDocuments = 20) => {
 
-    // 1. READ input files
-    console.log(chalk.cyan.bold("\n1. Reading input files:"))
-
-    var customerPath = path.join(__dirname, '..', 'data', 'input', 'customer.json');
-    var rawdata = fs.readFileSync(customerPath);
-    let customers = JSON.parse(rawdata);
-    console.log(" - Read " + customers.length + " customers");
-
-    var employeePath = path.join(__dirname, '..', 'data', 'input', 'employee.json');
-    rawdata = fs.readFileSync(employeePath);
-    let employees = JSON.parse(rawdata);
-    console.log(" - Read " + employees.length + " employees");
-    
-    var projectPath = path.join(__dirname, '..', 'data', 'input', 'project.json');
-    rawdata = fs.readFileSync(projectPath);
-    let projects = JSON.parse(rawdata);
-    console.log(" - Read " + projects.length + " projects");
-
-    var servicePath = path.join(__dirname, '..', 'data', 'input', 'service.json');
-    rawdata = fs.readFileSync(servicePath);
-    let services = JSON.parse(rawdata);
-    console.log(" - Read " + services.length + " services");
-
-    // 2. Connect to the db
+    // 1. Connect to the db
     console.log(chalk.cyan.bold("\n2. Connecting to MongoDB:"))
 
     const DB = process.env.DB_NAME
@@ -46,6 +24,30 @@ exports.run = async (numDocuments = 20) => {
     console.log(chalk.yellow.italic(" * Connected to DB"))
     const db = client.db(DB);
     const collection = db.collection(COLLECTION)
+
+    // 2. query the referenced collections
+    console.log(chalk.cyan.bold("\n2. Query referenced collections:"))
+    var projection = {_id:1}
+
+    var refcollection = db.collection("customers")
+    console.log(" - Running query on " + refcollection.namespace + ", projection: " + JSON.stringify(projection));
+    var customers = await refcollection.find({}, { projection } ).toArray()
+    console.log(" - Read " + customers.length + " " + refcollection.namespace.split('.')[1]);
+
+    refcollection = db.collection("employees")
+    console.log(" - Running query on " + refcollection.namespace + ", projection: " + JSON.stringify(projection));
+    var employees = await refcollection.find({}, { projection } ).toArray()
+    console.log(" - Read " + employees.length + " " + refcollection.namespace.split('.')[1]);
+
+    refcollection = db.collection("projects")
+    console.log(" - Running query on " + refcollection.namespace + ", projection: " + JSON.stringify(projection));
+    var projects = await refcollection.find({}, { projection } ).toArray()
+    console.log(" - Read " + projects.length + " " + refcollection.namespace.split('.')[1]);
+
+    refcollection = db.collection("services")
+    console.log(" - Running query on " + refcollection.namespace + ", projection: " + JSON.stringify(projection));
+    var services = await refcollection.find({}, { projection } ).toArray()
+    console.log(" - Read " + services.length + " " + refcollection.namespace.split('.')[1]);
 
     // 3. Generate timesheets and WRITE them in batches to files
     console.log(chalk.cyan.bold("\n3. Generating time sheets:"))
@@ -63,12 +65,6 @@ exports.run = async (numDocuments = 20) => {
 
     var count = 0
     var outputFiles = []
-
-    function getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
-    }
 
     // do the insertions
     try {
@@ -119,18 +115,18 @@ exports.run = async (numDocuments = 20) => {
                     timesheets_export = []
                     console.log(chalk.yellow.italic("* Saved batch to: " + outputPath))
 
+                    console.log(chalk.yellow.italic("* Inserting batch to MongoDB: " + collection.namespace))
+
                     // Timer
                     var start = process.hrtime();
-                    console.log(chalk.bgRed.bold("\nTiming insertMany of " + numDocuments + " documents in MongoDB...")); // timer start
+                    console.log(chalk.magenta("\t - Timing insertMany of " + timesheets.length + " documents in MongoDB...")); // timer start
 
                     await collection.insertMany(timesheets)
                     timesheets = []
 
                     // stopping time and loging to console
                     var end = process.hrtime(start);
-                    console.log(chalk.bgRed.bold(`\nExecution time: ${end[0]}s ${end[1] / 1000000}ms\n`));
-
-                    console.log(chalk.yellow.italic("* Inserted batch to MongoDB: " + DB + '.' + COLLECTION))
+                    console.log(chalk.magenta.bold(`\t\t ... execution time: ${end[0]}s ${end[1] / 1000000}ms\n`));
 
                     //exit loop if enough total timesheets
                     if (count >= numDocuments) break

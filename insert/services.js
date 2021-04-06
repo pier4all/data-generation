@@ -6,6 +6,7 @@ require('dotenv').config()
 const {ObjectID} = require('mongodb');
 const fs = require('fs');
 var path = require('path');
+const { getRandomInt } = require("./common/util")
 
 exports.run = async (numDocuments = 20) => {
 
@@ -13,7 +14,7 @@ exports.run = async (numDocuments = 20) => {
     console.log(chalk.cyan.bold("\n1. Connecting to MongoDB:"))
 
     const DB = process.env.DB_NAME
-    const COLLECTION = 'customers'
+    const COLLECTION = 'services'
 
     var MongoClient = require('mongodb').MongoClient;
     const mongodb_uri = process.env.DB_URI
@@ -42,30 +43,30 @@ exports.run = async (numDocuments = 20) => {
     // do the insertions
     try {
 
-        while ((count + documents.length) < numDocuments) {              
-
+        while ((count + documents.length) < numDocuments) {   
+          
             // added for customers
-            var name = faker.company.companyName();
-            var separators = ['_', '.', '']
-            var separator = separators[Math.floor(Math.random() * separators.length)];
-            var email = name.toLowerCase().replace(' and ', separator).replace(' ',separator).replace(/[^a-zA-Z0-9_\.]/g,'') + '@' + faker.internet.email().split('@')[1];
-
-            const language = ["DE", "EN", "FR"];
-            var random_language = language[Math.floor(Math.random() * language.length)];
-            var custno = 100000 + count + documents.length
+            var servno = 100000 + count + documents.length
+            
+            var descr = faker.name.jobArea() + ' ' + faker.name.jobType() + ' ' + faker.name.jobType() + '$';
+            if (descr.endsWith('or$')) descr = descr.replace('or$', 'ion')
+            else descr = descr.replace('$', ' Services')
+            
+            var type = "Stunde";
+            var price = getRandomInt(50, 500)
             
             document = { 
-                custno: custno,
-                name: name,
-                email: email,
-                "language": random_language
+                servno: servno,
+                descr: descr,
+                type: type,
+                price: price
             }    
 
             document_export = { 
-                custno: custno,
-                name: name,
-                email: email,
-                "language": random_language
+                servno: servno,
+                descr: descr,
+                type: type,
+                price: price
             }    
 
             documents.push(document)
@@ -75,7 +76,7 @@ exports.run = async (numDocuments = 20) => {
             if ((documents.length >= batchSize) || ((count + documents.length) >= numDocuments)){
                 count += documents.length
 
-                var outputPath = path.join(__dirname, '..', 'data', 'output', 'customer_' + count + '.json');
+                var outputPath = path.join(__dirname, '..', 'data', 'output', 'service_' + count + '.json');
                 fs.writeFileSync(outputPath, JSON.stringify(documents_export, null, 2))
                 outputFiles.push(outputPath)
                 documents_export = []
