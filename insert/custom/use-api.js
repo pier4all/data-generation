@@ -25,9 +25,9 @@ async function wait(ms) {
 exports.run = async () => {
 
     var fileList = [
-        //path.join(__dirname, '..', '..', 'data', 'input', 'customer.json'),
+        //path.join(__dirname, '..', '..', 'data', 'input', 'customer.json')//,
         //path.join(__dirname, '..', '..', 'data', 'output', 'customer_500.json'),
-        path.join(__dirname, '..', '..', 'data', 'output', 'customer_test_1000.json')//,
+        //path.join(__dirname, '..', '..', 'data', 'output', 'customer_test_1000.json')//,
         //path.join(__dirname, '..', '..', 'data', 'output', 'customer.json')//,
         // path.join(__dirname, '..', '..', 'data', 'input', 'employee.json'),
         // path.join(__dirname, '..', '..', 'data', 'input', 'project-edited.json'),
@@ -35,6 +35,17 @@ exports.run = async () => {
         // path.join(__dirname, '..', '..', 'data', 'output', 'timesheet_100.json'),
         // path.join(__dirname, '..', '..', 'data', 'output', 'timesheet_200.json'),
         // path.join(__dirname, '..', '..', 'data', 'output', 'timesheet_300.json')    
+
+        path.join(__dirname, '..', '..', 'data', 'output', 'customer_10000.json'),  
+        path.join(__dirname, '..', '..', 'data', 'output', 'customer_20000.json'),  
+        path.join(__dirname, '..', '..', 'data', 'output', 'customer_30000.json'),  
+        path.join(__dirname, '..', '..', 'data', 'output', 'customer_40000.json'),  
+        path.join(__dirname, '..', '..', 'data', 'output', 'customer_50000.json'),  
+        path.join(__dirname, '..', '..', 'data', 'output', 'customer_60000.json'),  
+        path.join(__dirname, '..', '..', 'data', 'output', 'customer_70000.json'),  
+        path.join(__dirname, '..', '..', 'data', 'output', 'customer_80000.json'),  
+        path.join(__dirname, '..', '..', 'data', 'output', 'customer_90000.json'),  
+        path.join(__dirname, '..', '..', 'data', 'output', 'customer_100000.json') 
     ]
 
     for (var file of fileList) {
@@ -62,6 +73,7 @@ exports.run = async () => {
                         }
                     })
                 }); 
+                document.email = document.email.split('@')[0] + document.custno + '@' + document.email.split('@')[1]
                 var response = await axios.post(url, document);     
                 inserted.push(response.data) 
 
@@ -88,7 +100,7 @@ exports.run = async () => {
 
         await wait(2000)
 
-        console.log("\t - Querying current version at Collection '" + collection + "'");
+        console.log("\t - Querying currently valid version at Collection '" + collection + "'");
         for(var document of inserted) {
             try {
                 url = generateRequest(collection, document._id)
@@ -98,9 +110,37 @@ exports.run = async () => {
                 return
             }           
         }
+
         await wait(2000)
 
-        console.log("\t - Querying past version at Collection '" + collection + "'");
+        console.log("\t - Querying past valid version at Collection '" + collection + "'");
+        for(var document of inserted) {
+            try {
+                var date = document._validity.start
+                url = generateRequest(collection, document._id)
+                var response = await axios.get(url, {params: {date}});     
+            } catch (error) {
+                console.error(chalk.redBright.bold(error.message));
+                return
+            }           
+        }
+
+        await wait(2000)
+
+        console.log("\t - Querying current version at Collection '" + collection + "'");
+        for(var document of inserted) {
+            try {
+                url = generateRequest(collection, document._id)
+                var response = await axios.get(url + "/2");     
+            } catch (error) {
+                console.error(chalk.redBright.bold(error.message));
+                return
+            }           
+        }
+
+        await wait(2000)
+
+        console.log("\t - Querying previous version at Collection '" + collection + "'");
         for(var document of inserted) {
             try {
                 url = generateRequest(collection, document._id)
@@ -111,18 +151,17 @@ exports.run = async () => {
             }           
         }
 
-        await wait(2000)
+        // await wait(2000)
 
-        console.log("\t - Deleting from Collection '" + collection + "'");
-        for(var document of inserted) {
-            try {
-                url = generateRequest(collection, document._id)
-                var response = await axios.delete(url);     
-            } catch (error) {
-                console.error(chalk.redBright.bold(error.message));
-                return
-            }           
-        }
-
+        // console.log("\t - Deleting from Collection '" + collection + "'");
+        // for(var document of inserted) {
+        //     try {
+        //         url = generateRequest(collection, document._id)
+        //         var response = await axios.delete(url);     
+        //     } catch (error) {
+        //         console.error(chalk.redBright.bold(error.message));
+        //         return
+        //     }           
+        // }
     } 
 }
