@@ -42,8 +42,21 @@ exports.run = async (params) => {
           {
             '$match': {
               'date': {
-                '$gte': new Date(startDate), 
-                '$lt': new Date(endDate)
+                '$gte': new Date('Tue, 01 Dec 2020 00:00:00 GMT'), 
+                '$lt': new Date('Fri, 01 Jan 2021 00:00:00 GMT')
+              }
+            }
+          }, {
+            '$lookup': {
+              'from': 'services', 
+              'localField': 'ref-service', 
+              'foreignField': '_id', 
+              'as': 'service'
+            }
+          }, {
+            '$addFields': {
+              'service': {
+                '$first': '$service'
               }
             }
           }, {
@@ -52,7 +65,7 @@ exports.run = async (params) => {
                 '$round': [
                   {
                     '$multiply': [
-                      '$quantity', 50.0
+                      '$quantity', '$service.price'
                     ]
                   }, 1
                 ]
@@ -61,7 +74,7 @@ exports.run = async (params) => {
           }, {
             '$group': {
               '_id': {
-                'project': '$ref-project', 
+                'ref-project': '$ref-project', 
                 'period': {
                   '$dateToString': {
                     'format': '%Y-%m', 
@@ -72,12 +85,13 @@ exports.run = async (params) => {
               'item': {
                 '$push': {
                   'ref-timesheet': '$_id', 
-                  'quantity': '$quantity', 
-                  'price': '$price', 
+                  'quantity': '$quantity',
+                  'rate': '$service.price', 
+                  'linetotal': '$price', 
                   'date': '$date'
                 }
               }, 
-              'hours_booked': {
+              'hours': {
                 '$sum': '$quantity'
               }, 
               'amount': {
@@ -85,19 +99,27 @@ exports.run = async (params) => {
               }
             }
           }, {
+            '$addFields': {
+              'hours': {
+                '$round': [
+                  '$hours', 1
+                ]
+              }
+            }
+          }, {
             '$merge': {
-              'into': 'invoices', 
+              'into': 'invoices3', 
               'whenMatched': 'replace'
             }
           }
-        ]
-           
+        ]  
+            
         console.log("\t - Running aggregation by project, month, year: ");
 
         // initializing Timer
         var start = process.hrtime();
 
-        await collection.aggregate(pipeline).toArray() // limit(2). removed // , { allowDiskUse: true } removed
+        await collection.aggregate(pipeline, { allowDiskUse: true }).toArray() // limit(2). removed // , { allowDiskUse: true } removed
        
         // stopping time and loging to console
         var end = process.hrtime(start);
