@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "node app.js"
+    "dev": "node app.js",
+    "update-timesheets": "node app.js query --script query-invoices-updating-timesheets"
     },
   "author": "Lucia de Espona",
   "license": "ISC",

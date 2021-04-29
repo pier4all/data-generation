@@ -42,8 +42,10 @@ exports.run = async (params) => {
           {
             '$match': {
               'date': {
-                '$gte': new Date('Tue, 01 Dec 2020 00:00:00 GMT'), 
-                '$lt': new Date('Fri, 01 Jan 2021 00:00:00 GMT')
+                '$gte': new Date(startDate), 
+                '$lt': new Date(endDate)
+                // '$gte': new Date('Tue, 01 Dec 2020 00:00:00 GMT'), 
+                // '$lt': new Date('Fri, 01 Jan 2021 00:00:00 GMT')
               }
             }
           }, {
