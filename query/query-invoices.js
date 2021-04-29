@@ -9,7 +9,7 @@ exports.run = async () => {
     console.log(chalk.cyan.bold("\n1. Re-connecting to MongoDB:"))
 
     const DB = process.env.DB_NAME
-    const COLLECTION = 'invoices'
+    const COLLECTION = 'invoices3'
 
     var MongoClient = require('mongodb').MongoClient;
     const mongodb_uri = process.env.DB_URI
@@ -62,7 +62,8 @@ exports.run = async () => {
                         '$first': '$project.title'
                       }, 
                       'project_manager': {
-                        '$first': '$employee.lastname'
+                        'lastname': {'$first': '$employee.lastname'},
+                        'firstname': {'$first': '$employee.firstname'},
                       }
                     }
                   }, {
